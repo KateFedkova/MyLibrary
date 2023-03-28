@@ -43,6 +43,21 @@ class Users(Base):
         self.quote = quote
 
 
+class WishList(Base):
+    __tablename__ = "wish_list"
+
+    id = Column("id", Integer, primary_key=True)
+    title = Column("title", String)
+    author = Column("author", String)
+    user_id = Column("user_id", Integer, ForeignKey("users.id"))
+
+    def __init__(self, title,  author, user_id):
+        super().__init__()
+        self.title = title
+        self.author = author
+        self.user_id = user_id
+
+
 if not database_exists(engine.url):
     create_database(engine.url)
 
