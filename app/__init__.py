@@ -1,14 +1,14 @@
-from flask import Flask, render_template, request, make_response
-from werkzeug.security import generate_password_hash
-
+from flask import Flask
 from .database import Users, session
-import json
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
-CORS(app)
 
 app.secret_key = "Someurj"
+app.config["JWT_SECRET_KEY"] = "skiejdm"
+CORS(app)
+JWTManager(app)
 
 
 # @app.route("/", methods=["GET", "POST"])
