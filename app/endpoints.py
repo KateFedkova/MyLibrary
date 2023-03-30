@@ -4,8 +4,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from app import app
 import json
 from .database import session, Users, WishList, Reviews
-from datetime import datetime
-from sqlalchemy import desc
+from datetime import datetime, timedelta
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -37,7 +36,7 @@ def login():
     print(user)
 
     if user and check_password_hash(user.password, request_data["password"]):
-        token = create_access_token(identity=user.id)
+        token = create_access_token(identity=user.id, expires_delta=timedelta(days=30))
         response = make_response({"isLogged": True, "token": token})
         response.status_code = 200
         return response
@@ -132,5 +131,50 @@ def get_reviews():
         jsonified.append(json_dict)
     print(jsonified)
     response = make_response(jsonify(jsonified))
+    return response
+
+
+@app.route("/get_username", methods=["GET", "POST"])
+@jwt_required()
+def get_username():
+    name = session.query(Users).where(Users.id == get_jwt_identity()).first()
+    print(name)
+
+    converted = name.__dict__
+    converted.pop('_sa_instance_state', None)
+
+    json_dict = json.dumps(converted)
+    print(json_dict)
+    print(type(json_dict))
+    print(type(jsonify(json_dict)))
+
+    response = make_response(jsonify(json_dict))
+    return response
+
+
+@app.route("/change_info", methods=["GET", "POST"])
+@jwt_required()
+def change_info():
+
+    request_data = json.loads(request.data)
+    print(request_data)
+    user = session.query(Users).where(Users.id == get_jwt_identity()).first()
+    response = make_response()
+
+    if user.username != request_data["username"]:
+        user.username = request_data["username"]
+        session.commit()
+        response = make_response({"username is changed": True})
+
+    elif request_data["password"]:
+        user.password = generate_password_hash(request_data["password"])
+        session.commit()
+        response = make_response({"password is changed": True})
+
+    elif user.username != request_data["username"] and request_data["password"]:
+        user.username = request_data["username"]
+        user.password = generate_password_hash(request_data["password"])
+        session.commit()
+        response = make_response({"username and password are changed": True})
 
     return response

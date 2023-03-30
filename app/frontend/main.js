@@ -3,11 +3,18 @@ window.onload = (event) => {
     token = localStorage.getItem("token")
     console.log(token)
 
+    const logout = document.getElementById("logout")
+
     form = document.getElementById("add-book-form");
     const url = "http://127.0.0.1:5000/add_book";
 
     const reviewUrl = "http://127.0.0.1:5000/add_review"
     const reviewForm = document.getElementById("add-review")
+
+    logout.addEventListener("click", function (event) {
+        localStorage.removeItem("token")
+        location.replace("/index.html")
+    })
 
      reviewForm.addEventListener("submit", (event) => {
         event.preventDefault();
