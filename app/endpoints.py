@@ -3,7 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from app import app
 import json
-from .database import session, Users, WishList
+from .database import session, Users, WishList, Reviews
+from datetime import datetime
+from sqlalchemy import desc
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -88,3 +90,47 @@ def get_books():
     return response
 
 
+@app.route("/add_review", methods=["GET", "POST"])
+@jwt_required()
+def add_review():
+    request_data = json.loads(request.data)
+    print(request_data)
+    review = session.query(Reviews).where(Reviews.review == request_data["review"]).first()
+    print(review)
+
+    if review:
+        response = make_response({"isAdded": False, "reason": "already exists"})
+        response.status_code = 401
+        return response
+
+    new_review = Reviews(title=request_data["book-title"], author=request_data["book-author"],
+                      review=request_data["review"], date_added=datetime.utcnow(), user_id=get_jwt_identity())
+    session.add(new_review)
+    session.commit()
+
+    response = make_response({"isAdded": True})
+    response.status_code = 200
+    return response
+
+
+@app.route("/get_reviews", methods=["GET", "POST"])
+@jwt_required()
+def get_reviews():
+    #user_reviews = session.query(Reviews).where(Reviews.user_id == get_jwt_identity()).all().order_by(Reviews.date_added)
+    user_reviews = session.query(Reviews).where(Reviews.user_id == get_jwt_identity()).order_by(Reviews.date_added.desc()).all()
+    print(user_reviews)
+
+    jsonified = []
+
+    for i in user_reviews:
+        converted = i.__dict__
+        converted.pop('_sa_instance_state', None)
+        print(converted)
+        converted.pop("date_added", None)
+        json_dict = json.dumps(converted)
+        print(json_dict)
+        jsonified.append(json_dict)
+    print(jsonified)
+    response = make_response(jsonify(jsonified))
+
+    return response

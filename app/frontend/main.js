@@ -6,6 +6,17 @@ window.onload = (event) => {
     form = document.getElementById("add-book-form");
     const url = "http://127.0.0.1:5000/add_book";
 
+    const reviewUrl = "http://127.0.0.1:5000/add_review"
+    const reviewForm = document.getElementById("add-review")
+
+     reviewForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        sendRequestToServer(reviewForm, reviewUrl)
+
+        .then(data => console.log(data))
+        .catch(error => console.error(error))
+        });
+
      form.addEventListener("submit", (event) => {
         event.preventDefault();
         sendRequestToServer(form, url)
@@ -50,17 +61,35 @@ window.onload = (event) => {
         eventsFromApi.forEach(function (event) {
             event = JSON.parse(event)
             const tr1 = document.createElement("tr")
-            console.log(tr1)
             const td1 = document.createElement("td")
-
-            console.log(tr1)
             td1.textContent = event.title
-             tr1.appendChild(td1)
+            tr1.appendChild(td1)
             const td2 = document.createElement("td")
             td2.textContent = event.author
             tr1.appendChild(td2)
             tableBody.appendChild(tr1)
 
+    })
+    }
+
+    function Reviews(eventsFromApi) {
+        console.log(eventsFromApi)
+        const divBody = document.getElementById("all-posts")
+
+        eventsFromApi.forEach(function (event) {
+            event = JSON.parse(event)
+            const divForReview = document.createElement("div")
+            const h2 = document.createElement("h2")
+            h2.textContent = event.title
+            const h3 = document.createElement("h3")
+            h3.textContent = event.author
+            const h1 = document.createElement("h1")
+            h1.textContent = event.review
+            divForReview.appendChild(h2)
+            divForReview.appendChild(h3)
+            divForReview.appendChild(h1)
+
+            divBody.appendChild(divForReview)
     })
     }
 
@@ -78,6 +107,20 @@ window.onload = (event) => {
 
 }
 
+     function getReviews() {
+        const apiUrl = "http://127.0.0.1:5000/get_reviews"
+        return fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`}
+            })
+        .then(data => data.json())
+        .catch(error => console.error(error))
+}
     getBooks()
     .then(data => Books(data))
+
+    getReviews()
+    .then(data => Reviews(data))
+
 }

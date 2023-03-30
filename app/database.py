@@ -1,5 +1,5 @@
 from sqlalchemy.orm import declarative_base, sessionmaker
-from sqlalchemy import Integer, Column, String, create_engine, Date, Time, ForeignKey
+from sqlalchemy import Integer, Column, String, create_engine, Date, Time, ForeignKey, DateTime
 from sqlalchemy_utils import create_database, database_exists
 
 
@@ -55,6 +55,25 @@ class WishList(Base):
         super().__init__()
         self.title = title
         self.author = author
+        self.user_id = user_id
+
+
+class Reviews(Base):
+    __tablename__ = "reviews"
+
+    id = Column("id", Integer, primary_key=True)
+    title = Column("title", String)
+    author = Column("author", String)
+    review = Column("review", String)
+    date_added = Column("date_added", DateTime)
+    user_id = Column("user_id", Integer, ForeignKey("users.id"))
+
+    def __init__(self, title,  author, review, date_added, user_id):
+        super().__init__()
+        self.title = title
+        self.author = author
+        self.review = review
+        self.date_added = date_added
         self.user_id = user_id
 
 
