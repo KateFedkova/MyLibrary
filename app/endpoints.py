@@ -6,6 +6,7 @@ import json
 from .database import session, Users, WishList, Reviews
 from datetime import datetime, timedelta
 import requests
+from .services import book_info
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -186,14 +187,28 @@ def search():
     request_data = json.loads(request.data)
     option = request_data["select-items"]
     title = request_data["search-by-title"].lower().replace(" ", "+")
-    print(title)
+    author = request_data["search-by-author"].lower().replace(" ", "+")
+    #print(title)
     if option == "title":
         description, subject_places, subjects, subject_times = search_info_by_title(title)
         #print(description, subject_places, subjects, subject_times)
         response_dict = {"title": title, "description": description, "subject_places": subject_places, "subjects": subjects, "subject_times": subject_times}
-        print(response_dict)
+        #print(response_dict)
         response = make_response(jsonify(response_dict))
         return response
+
+    elif option == "author":
+        all_books = search_info_by_author(author)
+        books = book_info(all_books)
+
+        response = make_response(jsonify(books))
+        print("make response")
+        return response
+
+    else:
+
+
+
     #response = make_response({"hello": True})
     #return response
 
@@ -233,9 +248,68 @@ def search_info_by_title(title):
     except KeyError:
         subject_times = "No subject times found"
 
-
     # author_key = info_book.json()["authors"][0]["author"]["key"]
     # author = requests.get(f"https://openlibrary.org/{author_key}.json")
     # print(author.json())
     # fuller_name = author.json()["fuller_name"]
     return description, subject_places, subjects, subject_times
+
+
+def search_info_by_author(author):
+    author_info = requests.get(f"https://openlibrary.org/search.json?author={author}&limit=5")
+    author_books = author_info.json()["docs"]
+    all_books = []
+    #print(author_books)
+    print("here")
+    book_titles = []
+    for i in author_books:
+        #print(i)
+        book = requests.get(f"https://openlibrary.org/{i['key']}.json").json()
+        if not book["title"] in book_titles:
+            book_titles.append(book["title"])
+            all_books.append(book["key"])
+            #all_books.append({book["title"]: book["key"]})
+
+
+        # if all_books:
+        #     for j in all_books:
+        #         if j["title"] == book["title"]:
+        #             continue
+        #     all_books.append(book)
+
+    # for i in all_books:
+    #     print(i)
+    #     print("-------------------------")
+    #print(all_books)
+    print("all keys got")
+    return all_books
+
+
+def search_info_by_category(category):
+    author_info = requests.get(f"https://openlibrary.org/search.json?author={author}&limit=5")
+    author_books = author_info.json()["docs"]
+    all_books = []
+    #print(author_books)
+    print("here")
+    book_titles = []
+    for i in author_books:
+        #print(i)
+        book = requests.get(f"https://openlibrary.org/{i['key']}.json").json()
+        if not book["title"] in book_titles:
+            book_titles.append(book["title"])
+            all_books.append(book["key"])
+            #all_books.append({book["title"]: book["key"]})
+
+
+        # if all_books:
+        #     for j in all_books:
+        #         if j["title"] == book["title"]:
+        #             continue
+        #     all_books.append(book)
+
+    # for i in all_books:
+    #     print(i)
+    #     print("-------------------------")
+    #print(all_books)
+    print("all keys got")
+    return all_books

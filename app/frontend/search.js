@@ -3,33 +3,56 @@ window.onload = (event) => {
     token = localStorage.getItem("token")
     console.log(token)
 
-
+    const divForBookInfo = document.getElementById("all-found-books")
     searchByTitleLabel = document.getElementById("search-by-title-label")
     searchByTitle = document.getElementById("search-by-title")
 
     searchForm = document.getElementById("search-form")
     option = document.getElementById("select-items")
-    console.log(option.value)
-
-    searchByAuthorLabel = document.getElementById("search-by-author-label")
+     searchByAuthorLabel = document.getElementById("search-by-author-label")
     searchByAuthor = document.getElementById("search-by-author")
+
+    selectGenres = document.getElementById("select-genres")
 
     searchByAuthor.style.display = "none"
     searchByAuthorLabel.style.display = "none"
+    selectGenres.style.display = "none"
+
+    option.addEventListener("change", function (event) {
+        value = option.value
+        if (option.value === "title") {
+            searchByAuthor.style.display = "none"
+            searchByAuthorLabel.style.display = "none"
+            selectGenres.style.display = "none"
+            searchByTitle.style.display = "block"
+            searchByTitleLabel.style.display = "block"
+        }
+
+        if (option.value === "author") {
+            searchByAuthor.style.display = "block"
+            searchByAuthorLabel.style.display = "block"
+            searchByTitle.style.display = "none"
+            searchByTitleLabel.style.display = "none"
+            selectGenres.style.display = "none"
+        }
+
+        if (option.value === "categories") {
+            searchByAuthor.style.display = "none"
+            searchByAuthorLabel.style.display = "none"
+            searchByTitle.style.display = "none"
+            searchByTitleLabel.style.display = "none"
+            selectGenres.style.display = "block"
+        }
+    })
+
 
     allFoundBooks = document.getElementById("all-found-books")
-
-    if (option.value === "author") {
-        searchByAuthor.style.display = "block"
-        searchByAuthorLabel.style.display = "block"
-        searchByTitle.style.display = "none"
-        searchByTitleLabel.style.display = "none"
-    }
 
 
     searchForm.addEventListener("submit", function (event) {
 
        event.preventDefault()
+       divForBookInfo.innerHTML = ""
        const formData = new FormData(searchForm);
        const data = {};
 
@@ -38,14 +61,23 @@ window.onload = (event) => {
        }
 
         searchResults(data)
-        .then(data => displayBooks(data))
+        .then(function (result) {
+                if (option.value === "title")
+                    {displayBooks(result)}
+                else if (option.value === "author")
+                    {
+                    console.log("here")
+                    console.log(result)
+                    displayAuthors(result)
+                    console.log("and here")
+                    }})
 
     })
 
     function searchResults(data) {
-    const url =  "http://127.0.0.1:5000/search"
-    return new Promise((resolve, reject) => {
-            fetch(url, {
+        const url =  "http://127.0.0.1:5000/search"
+        return new Promise((resolve, reject) => {
+                fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -89,5 +121,38 @@ window.onload = (event) => {
         divForBookInfo.appendChild(subjects)
         divForBookInfo.appendChild(subject_times)
 
+    }
+
+
+    function displayAuthors(book) {
+        console.log("in func")
+        const divForBookInfo = document.getElementById("all-found-books")
+
+        book.forEach(function (event) {
+
+            const bookDiv = document.createElement("div")
+            const title = document.createElement("h2")
+            title.textContent = event.title
+
+            const description = document.createElement("h3")
+            description.textContent = event.description
+
+
+            const subject_places = document.createElement("h3")
+            subject_places.textContent = event.subject_places
+
+            const subjects = document.createElement("h3")
+            subjects.textContent = event.subjects
+
+            const subject_times = document.createElement("h3")
+            subject_times.textContent = event.subject_times
+
+            bookDiv.appendChild(title)
+            bookDiv.appendChild(description)
+            bookDiv.appendChild(subject_places)
+            bookDiv.appendChild(subjects)
+            bookDiv.appendChild(subject_times)
+            divForBookInfo.appendChild(bookDiv)
+        })
     }
 }
