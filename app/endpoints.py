@@ -21,7 +21,7 @@ def signup():
 
     password = generate_password_hash(request_data["password"])
     #request_data["password"] = password
-    user = Users(username=request_data["username"], password=password, quote=None)
+    user = Users(username=request_data["username"], password=password)
     session.add(user)
     session.commit()
 
@@ -206,8 +206,12 @@ def search():
         return response
 
     else:
+        all_books = search_info_by_category(request_data["category"])
+        books = book_info(all_books)
 
+        response = make_response(jsonify(books))
 
+        return response
 
     #response = make_response({"hello": True})
     #return response
@@ -286,30 +290,20 @@ def search_info_by_author(author):
 
 
 def search_info_by_category(category):
-    author_info = requests.get(f"https://openlibrary.org/search.json?author={author}&limit=5")
-    author_books = author_info.json()["docs"]
+    all_books_by_category = requests.get(f"https://openlibrary.org/subjects/{category}.json?limit=10")
+    books_by_category = all_books_by_category.json()["works"]
     all_books = []
     #print(author_books)
-    print("here")
     book_titles = []
-    for i in author_books:
-        #print(i)
+    for i in books_by_category:
         book = requests.get(f"https://openlibrary.org/{i['key']}.json").json()
         if not book["title"] in book_titles:
             book_titles.append(book["title"])
             all_books.append(book["key"])
-            #all_books.append({book["title"]: book["key"]})
-
-
-        # if all_books:
-        #     for j in all_books:
-        #         if j["title"] == book["title"]:
-        #             continue
-        #     all_books.append(book)
 
     # for i in all_books:
     #     print(i)
     #     print("-------------------------")
     #print(all_books)
-    print("all keys got")
+    #print("all keys got")
     return all_books

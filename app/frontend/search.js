@@ -59,6 +59,8 @@ window.onload = (event) => {
        for (const[key, value] of formData.entries()) {
             data[key] = value
        }
+       option.value === "categories"
+       if (option.value === "categories") {data["category"] = selectGenres.value}
 
         searchResults(data)
         .then(function (result) {
@@ -66,11 +68,10 @@ window.onload = (event) => {
                     {displayBooks(result)}
                 else if (option.value === "author")
                     {
-                    console.log("here")
-                    console.log(result)
                     displayAuthors(result)
-                    console.log("and here")
-                    }})
+                    }
+                else {displayAuthors(result)}
+                })
 
     })
 
@@ -125,7 +126,6 @@ window.onload = (event) => {
 
 
     function displayAuthors(book) {
-        console.log("in func")
         const divForBookInfo = document.getElementById("all-found-books")
 
         book.forEach(function (event) {
