@@ -5,6 +5,7 @@ from app import app
 import json
 from .database import session, Users, WishList, Reviews
 from datetime import datetime, timedelta
+import requests
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -178,3 +179,63 @@ def change_info():
         response = make_response({"username and password are changed": True})
 
     return response
+
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    request_data = json.loads(request.data)
+    option = request_data["select-items"]
+    title = request_data["search-by-title"].lower().replace(" ", "+")
+    print(title)
+    if option == "title":
+        description, subject_places, subjects, subject_times = search_info_by_title(title)
+        #print(description, subject_places, subjects, subject_times)
+        response_dict = {"title": title, "description": description, "subject_places": subject_places, "subjects": subjects, "subject_times": subject_times}
+        print(response_dict)
+        response = make_response(jsonify(response_dict))
+        return response
+    #response = make_response({"hello": True})
+    #return response
+
+
+def search_info_by_title(title):
+    books = requests.get(f"https://openlibrary.org/search.json?title={title}")
+    book_key = books.json()["docs"][0]["key"]
+    #info_book = requests.get(f"https://openlibrary.org/{book_key}.json")
+    info_book = requests.get(f"https://openlibrary.org/{book_key}.json").json()
+    # description = info_book.json()["description"] if True else info_book.json()["description"]["value"] else "No description found" if KeyError
+    # subject_places = info_book.json()["subject_places"]
+    # subjects = info_book.json()["subjects"]
+    # subject_times = info_book.json()["subject_times"]
+    # #author_key = info_book.json()["authors"][0]["author"]["key"]
+    # #author = requests.get(f"https://openlibrary.org/{author_key}.json")
+    # #print(author.json())
+    # #fuller_name = author.json()["fuller_name"]
+    # return description, subject_places, subjects, subject_times
+    try:
+        description = info_book["description"]["value"]
+    except TypeError:
+        description = info_book["description"]
+    except KeyError:
+        description = "No description found"
+    try:
+        subject_places = info_book["subject_places"]
+    except KeyError:
+        subject_places = "No subject places found"
+    try:
+        subjects = info_book["subjects"]
+    except KeyError:
+        subjects = "No subjects found"
+
+    #subjects = info_book["subjects"]
+    try:
+        subject_times = info_book["subject_times"]
+    except KeyError:
+        subject_times = "No subject times found"
+
+
+    # author_key = info_book.json()["authors"][0]["author"]["key"]
+    # author = requests.get(f"https://openlibrary.org/{author_key}.json")
+    # print(author.json())
+    # fuller_name = author.json()["fuller_name"]
+    return description, subject_places, subjects, subject_times

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <script src="search.js"></script>
+</head>
+<body>
+
+  <form id="search-form">
+      <h3>Seach by: </h3>
+      <select id="select-items" name="select-items">
+         <option value="title">title</option>
+         <option value="author">author</option>
+         <option value="categories">categories</option>
+     </select>
+
+      <label id="search-by-title-label" for="search-by-title">Enter the title of book</label>
+      <input type="text" id="search-by-title" name="search-by-title">
+
+      <label id="search-by-author-label" for="search-by-author">Enter the author of book</label>
+      <input type="text" id="search-by-author" name="search-by-author">
+
+    <input type="submit" id="search-button" name="button" value="Search">
+
+  </form>
+
+    <div id="all-found-books"></div>
+
+</body>
+</html>
