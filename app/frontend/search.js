@@ -6,6 +6,8 @@ window.onload = (event) => {
     const divForBookInfo = document.getElementById("all-found-books")
     searchByTitleLabel = document.getElementById("search-by-title-label")
     searchByTitle = document.getElementById("search-by-title")
+    searchButton = document.getElementById("search-button")
+    warning = document.getElementById("warning")
 
     searchForm = document.getElementById("search-form")
     option = document.getElementById("select-items")
@@ -13,10 +15,13 @@ window.onload = (event) => {
     searchByAuthor = document.getElementById("search-by-author")
 
     selectGenres = document.getElementById("select-genres")
+    category = document.getElementById("category")
 
     searchByAuthor.style.display = "none"
     searchByAuthorLabel.style.display = "none"
     selectGenres.style.display = "none"
+    warning.style.display = "none"
+    category.style.display = "none"
 
     option.addEventListener("change", function (event) {
         value = option.value
@@ -26,6 +31,7 @@ window.onload = (event) => {
             selectGenres.style.display = "none"
             searchByTitle.style.display = "block"
             searchByTitleLabel.style.display = "block"
+             category.style.display = "none"
         }
 
         if (option.value === "author") {
@@ -34,6 +40,7 @@ window.onload = (event) => {
             searchByTitle.style.display = "none"
             searchByTitleLabel.style.display = "none"
             selectGenres.style.display = "none"
+             category.style.display = "none"
         }
 
         if (option.value === "categories") {
@@ -42,6 +49,7 @@ window.onload = (event) => {
             searchByTitle.style.display = "none"
             searchByTitleLabel.style.display = "none"
             selectGenres.style.display = "block"
+            category.style.display = "block"
         }
     })
 
@@ -49,10 +57,11 @@ window.onload = (event) => {
     allFoundBooks = document.getElementById("all-found-books")
 
 
-    searchForm.addEventListener("submit", function (event) {
+    searchButton.addEventListener("click", function (event) {
 
        event.preventDefault()
        divForBookInfo.innerHTML = ""
+       warning.style.display = "block"
        const formData = new FormData(searchForm);
        const data = {};
 
@@ -102,19 +111,19 @@ window.onload = (event) => {
         console.log(typeof(book))
 
         const title = document.createElement("h2")
-        title.textContent = book.title
+        title.textContent = `Title: ${book.title}`
 
         const description = document.createElement("h3")
-        description.textContent = book.description
+        description.textContent = `Description: ${book.description}`
 
         const subject_places = document.createElement("h3")
-        subject_places.textContent = book.subject_places
+        subject_places.textContent = `Places: ${book.subject_places}`
 
         const subjects = document.createElement("h3")
-        subjects.textContent = book.subjects
+        subjects.textContent = `Subjects: ${book.subjects}`
 
         const subject_times = document.createElement("h3")
-        subject_times.textContent = book.subject_times
+        subject_times.textContent = `Times: ${book.subject_times}`
 
         divForBookInfo.appendChild(title)
         divForBookInfo.appendChild(description)
