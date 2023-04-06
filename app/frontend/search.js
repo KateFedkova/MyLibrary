@@ -112,23 +112,33 @@ window.onload = (event) => {
 
         const title = document.createElement("h2")
         title.textContent = `Title: ${book.title}`
+        const br1 = document.createElement("br")
+        const br2 = document.createElement("br")
+        const br3 = document.createElement("br")
 
-        const description = document.createElement("h3")
+        const description = document.createElement("span")
         description.textContent = `Description: ${book.description}`
+        description.classList.add("cards")
 
-        const subject_places = document.createElement("h3")
+        const subject_places = document.createElement("span")
         subject_places.textContent = `Places: ${book.subject_places}`
+        subject_places.classList.add("cards")
 
-        const subjects = document.createElement("h3")
+        const subjects = document.createElement("span")
         subjects.textContent = `Subjects: ${book.subjects}`
+        subjects.classList.add("cards")
 
-        const subject_times = document.createElement("h3")
+        const subject_times = document.createElement("span")
         subject_times.textContent = `Times: ${book.subject_times}`
+        subject_times.classList.add("cards")
 
         divForBookInfo.appendChild(title)
         divForBookInfo.appendChild(description)
+        divForBookInfo.appendChild(br1)
         divForBookInfo.appendChild(subject_places)
+        divForBookInfo.appendChild(br2)
         divForBookInfo.appendChild(subjects)
+        divForBookInfo.appendChild(br3)
         divForBookInfo.appendChild(subject_times)
 
     }
@@ -142,25 +152,33 @@ window.onload = (event) => {
             const bookDiv = document.createElement("div")
             const title = document.createElement("h2")
             title.textContent = event.title
+            const br1 = document.createElement("br")
+            const br2 = document.createElement("br")
+            const br3 = document.createElement("br")
+            const br = document.createElement("br")
 
-            const description = document.createElement("h3")
-            description.textContent = event.description
+            const description = document.createElement("span")
+            description.textContent = `1. Description: ${event.description}`
 
 
-            const subject_places = document.createElement("h3")
-            subject_places.textContent = event.subject_places
+            const subject_places = document.createElement("span")
+            subject_places.textContent = `2. Places: ${event.subject_places}`
 
-            const subjects = document.createElement("h3")
-            subjects.textContent = event.subjects
+            const subjects = document.createElement("span")
+            subjects.textContent =  `3. Subjects: ${event.subjects}`
 
-            const subject_times = document.createElement("h3")
-            subject_times.textContent = event.subject_times
+            const subject_times = document.createElement("span")
+            subject_times.textContent = `4. Times: ${event.subject_times}`
 
             bookDiv.appendChild(title)
             bookDiv.appendChild(description)
+            bookDiv.appendChild(br)
             bookDiv.appendChild(subject_places)
+            bookDiv.appendChild(br1)
             bookDiv.appendChild(subjects)
+            bookDiv.appendChild(br2)
             bookDiv.appendChild(subject_times)
+            bookDiv.appendChild(br3)
             divForBookInfo.appendChild(bookDiv)
         })
     }

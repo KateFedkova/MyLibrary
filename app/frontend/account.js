@@ -14,6 +14,7 @@ window.onload = (event) => {
 
     button.addEventListener("click", function (event) {
         updateForm.style.display="block"
+        button.style.display="none"
 
     })
 
@@ -27,6 +28,7 @@ window.onload = (event) => {
         }
 
          updateForm.style.display="none"
+         button.style.display="block"
          sendChangedData(data)
     })
 

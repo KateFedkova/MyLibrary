@@ -4,16 +4,51 @@
     <meta charset="UTF-8">
     <title>Search</title>
     <script src="search.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="search.css">
 </head>
 <body>
 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+         <div class="container-fluid">
+             <span class="navbar-brand mb-0 h1">MyLibrary</span>
+
+             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                 <span class="navbar-toggler-icon"></span>
+             </button>
+
+         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+             <div class="navbar-nav">
+                 <a class="nav-link active" aria-current="page" href="/main.html">Home</a>
+             </div>
+             <div class="navbar-nav">
+                 <a class="nav-link active" aria-current="page" href="/search_book.html">Search</a>
+             </div>
+             <div class="navbar-nav">
+                 <a class="nav-link active" aria-current="page" href="/account.html">Account</a>
+             </div>
+             <div class="navbar-nav">
+                 <button class="nav-link active" aria-current="page" id="logout">Log Out</button>
+             </div>
+
+         </div>
+     </div>
+</nav>
+
+  <div id="warning" class="alert alert-warning alert-dismissible show" role="alert">
+      <h5>Please wait, this may take a few minutes</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
   <form id="search-form">
-      <h3>Seach by: </h3>
+      <span>Seach by: </span>
       <select id="select-items" name="select-items">
          <option value="title">title</option>
          <option value="author">author</option>
          <option value="categories">categories</option>
-     </select>
+     </select><br>
 
       <label id="search-by-title-label" for="search-by-title">Enter the title of book</label>
       <input type="text" id="search-by-title" name="search-by-title">
@@ -21,8 +56,9 @@
       <label id="search-by-author-label" for="search-by-author">Enter the author of book</label>
       <input type="text" id="search-by-author" name="search-by-author">
 
+      <span id="category">Category: </span>
       <select id="select-genres" name="select-genres">
-         <option value="fantasy">fantasy</option>
+         <option class="option" value="fantasy">fantasy</option>
          <option value="classic">classic</option>
          <option value="magic">magic</option>
          <option value="detectives">detectives</option>
@@ -30,7 +66,15 @@
          <option value="fiction">fiction</option>
      </select>
 
-    <input type="submit" id="search-button" name="button" value="Search">
+    <div  class="container">
+        <a href="#" id="search-button" class="button">
+        <div class="button__line"></div>
+        <div class="button__line"></div>
+        <span class="button__text">Search</span>
+        <div class="button__drow1"></div>
+        <div class="button__drow2"></div>
+        </a>
+    </div>
 
   </form>
 

@@ -20,7 +20,8 @@ window.onload = (event) => {
         event.preventDefault();
         sendRequestToServer(reviewForm, reviewUrl)
 
-        .then(data => console.log(data))
+        .then(data => {console.log(data)
+         location.reload()})
         .catch(error => console.error(error))
         });
 
@@ -28,7 +29,8 @@ window.onload = (event) => {
         event.preventDefault();
         sendRequestToServer(form, url)
 
-        .then(data => console.log(data))
+        .then(data => {console.log(data)
+        location.reload()})
         .catch(error => console.error(error))
         });
 
@@ -86,17 +88,32 @@ window.onload = (event) => {
         eventsFromApi.forEach(function (event) {
             event = JSON.parse(event)
             const divForReview = document.createElement("div")
-            const h2 = document.createElement("h2")
-            h2.textContent = event.title
-            const h3 = document.createElement("h3")
-            h3.textContent = event.author
-            const h1 = document.createElement("h1")
-            h1.textContent = event.review
+            divForReview.classList.add("one-review")
+            const h2 = document.createElement("h4")
+            h2.textContent = `Title: ${event.title}`
+            const h3 = document.createElement("span")
+            h3.textContent = `Author: ${event.author}`
+            const h1 = document.createElement("span")
+            h1.textContent = `Review: ${event.review}`
+
+            const h6 = document.createElement("span")
+            h6.textContent = event.date_added
+            h6.classList.add("date")
+
+            const br = document.createElement("br")
+            const br1 = document.createElement("br")
+            const br2 = document.createElement("br")
+            const br3 = document.createElement("br")
+
             divForReview.appendChild(h2)
             divForReview.appendChild(h3)
+            divForReview.appendChild(br2)
             divForReview.appendChild(h1)
+            divForReview.appendChild(br3)
+            divForReview.appendChild(h6)
 
             divBody.appendChild(divForReview)
+            divBody.appendChild(br)
     })
     }
 

@@ -3,14 +3,16 @@ window.onload = (event) => {
     const form = document.getElementById("signup-form");
     const url = "http://127.0.0.1:5000/signup";
 
+    const exist = document.getElementById("if-exists");
+    console.log(exist.textContent)
+
     form.addEventListener("submit", (event) => {
         event.preventDefault();
         sendRequestToServer(form, url)
 
-        .then(data => console.log(data))
-        location.replace("/index.html")
+        .then(response => checkIfUserExists(response))
         .catch(error => console.error(error))
-        });
+        })
 
     function sendRequestToServer (form, url) {
 
@@ -39,4 +41,12 @@ window.onload = (event) => {
 
     }
 
+    function checkIfUserExists (response) {
+
+        if (response["isReg"] === true)
+           {location.replace("index.html")}
+        else if (response["isReg"] === false)
+            {exist.textContent = "User already exists"}
     }
+
+}

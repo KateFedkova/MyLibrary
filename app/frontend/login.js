@@ -9,12 +9,9 @@ window.onload = (event) => {
         event.preventDefault();
         sendRequestToServer(form, url)
 
-        .then(data => {
-            localStorage.setItem("token", data["token"])
-            location.replace("/main.html")
-        })
+        .then(response => checkIfUserExists(response))
         .catch(error => console.error(error))
-        });
+    })
 
     function sendRequestToServer (form, url) {
 
@@ -43,4 +40,12 @@ window.onload = (event) => {
 
     }
 
+    function checkIfUserExists (response) {
+
+        if (response["isLogged"] === true)
+           {localStorage.setItem("token", response["token"])
+            location.replace("/main.html")}
+        else if (response["isLogged"] === false)
+            {location.replace("/signup.html")}
     }
+}
