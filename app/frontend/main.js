@@ -1,7 +1,6 @@
 window.onload = (event) => {
 
     token = localStorage.getItem("token")
-    console.log(token)
 
     const logout = document.getElementById("logout")
 
@@ -20,8 +19,7 @@ window.onload = (event) => {
         event.preventDefault();
         sendRequestToServer(reviewForm, reviewUrl)
 
-        .then(data => {console.log(data)
-         location.reload()})
+        .then(data => location.reload())
         .catch(error => console.error(error))
         });
 
@@ -29,8 +27,7 @@ window.onload = (event) => {
         event.preventDefault();
         sendRequestToServer(form, url)
 
-        .then(data => {console.log(data)
-        location.reload()})
+        .then(data => location.reload())
         .catch(error => console.error(error))
         });
 

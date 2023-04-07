@@ -1,7 +1,6 @@
 window.onload = (event) => {
 
     token = localStorage.getItem("token")
-    console.log(token)
 
     const divForBookInfo = document.getElementById("all-found-books")
     searchByTitleLabel = document.getElementById("search-by-title-label")

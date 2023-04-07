@@ -1,6 +1,5 @@
 window.onload = (event) => {
     token = localStorage.getItem("token")
-    console.log(token)
 
     const form = document.getElementById("login-form");
     const url = "http://127.0.0.1:5000/login";

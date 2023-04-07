@@ -1,7 +1,6 @@
 window.onload = (event) => {
 
     token = localStorage.getItem("token")
-    console.log(token)
 
     const header = document.getElementById("header")
     const button = document.getElementById("update-account")
